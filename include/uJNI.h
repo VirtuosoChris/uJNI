@@ -48,6 +48,9 @@ void forObjectInJavaList(JNIEnv* env, jobject listObject, std::function<void (jo
 template<class Arg1,class ...Args>
 const std::string& compute_signature_string();
 
+template<class Arg1>
+const std::string& compute_signature_string_return();
+
 
 template<class RETURNTYPE, typename... Args>
 class JavaMethodCaller;
@@ -82,7 +85,7 @@ public:
     template<class RETURNTYPE, typename... Args>
     constexpr std::string makeSignature()
     {
-        return std::string("(") + compute_signature_string<Args...>() + ')' + compute_signature_string<RETURNTYPE>();
+        return std::string("(") + compute_signature_string<Args...>() + ')' + compute_signature_string_return<RETURNTYPE>();
     }
 
     template <class T>
@@ -131,7 +134,7 @@ public:
     template<class RETURNTYPE, typename... Args>
     constexpr std::string makeSignature()
     {
-        return std::string("(") +  compute_signature_string<Args...>() + ')' + compute_signature_string<RETURNTYPE>();
+        return std::string("(") +  compute_signature_string<Args...>() + ')' + compute_signature_string_return<RETURNTYPE>();
     }
 
 };

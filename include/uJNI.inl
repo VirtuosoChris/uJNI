@@ -33,6 +33,20 @@ inline const std::string& compute_signature_string()
 }
 
 
+template<class Arg1>
+inline const std::string& compute_signature_string_return()
+{
+    return compute_signature_string<Arg1>();
+}
+
+template<>
+inline const std::string& compute_signature_string_return<void>()
+{
+    static const std::string rval = "V";
+    return rval;
+}
+
+
 template<>
 inline const std::string& compute_signature_string<jint>()
 {
@@ -88,6 +102,15 @@ inline const std::string& compute_signature_string<jdouble>()
     static const std::string a= "D";
     return a;
 }
+
+
+template<>
+inline const std::string& compute_signature_string<jobject>()
+{
+    static const std::string a= "Ljava/lang/Object;";
+    return a;
+}
+
 
 template<>
 inline const std::string& compute_signature_string<void>()
