@@ -26,7 +26,7 @@
 //
 
 
-#include "include/uJNI.h"
+#include "../include/uJNI.h"
 
 #include <algorithm>
 
@@ -45,7 +45,20 @@ void detachCurrentThreadFromJVM()
     jvm()->DetachCurrentThread();
 }
 
+JavaClass loadClass(struct android_app* app, JNIEnv* env, const std::string& classname)
+{
+    jobject nativeActivity = app->activity->clazz;
+    jclass acl = env->GetObjectClass(nativeActivity);
+    jmethodID getClassLoader = env->GetMethodID(acl, "getClassLoader", "()Ljava/lang/ClassLoader;");
+    jobject cls = env->CallObjectMethod(nativeActivity, getClassLoader);
+    jclass classLoader = env->FindClass("java/lang/ClassLoader");
+    jmethodID findClass = env->GetMethodID(classLoader, "loadClass", "(Ljava/lang/String;)Ljava/lang/Class;");
+    jstring strClassName = env->NewStringUTF(classname.c_str());
+    jclass fireworksAudioClass = (jclass)(env->CallObjectMethod(cls, findClass, strClassName));
+    env->DeleteLocalRef(strClassName);
+}
 
+/*
 /// called when the java code calls System.loadLibrary.  Cache the copy of the JVM object ptr.
 jint JNI_OnLoad(JavaVM* pVM, void* reserved)
 {
@@ -57,7 +70,7 @@ jint JNI_OnLoad(JavaVM* pVM, void* reserved)
    }
 
    return JNI_VERSION_1_6;
-}
+}*/
 
 
 bool JavaObject::operator==(const JavaObject& objectIn)const

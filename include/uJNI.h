@@ -31,6 +31,9 @@
 #include <string>
 #include <functional>
 
+#include <android/native_window_jni.h>
+#include <android_native_app_glue.h>
+
 #include "uJNIClasses.h"
 
 /* todos */
@@ -96,6 +99,8 @@ public:
 
     operator bool()const;
 };
+
+JavaClass loadClass(struct android_app* app, JNIEnv* env, const std::string& classname);
 
 
 class JavaObject
