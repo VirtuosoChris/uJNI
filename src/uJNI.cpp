@@ -56,6 +56,7 @@ JavaClass loadClass(struct android_app* app, JNIEnv* env, const std::string& cla
     jstring strClassName = env->NewStringUTF(classname.c_str());
     jclass fireworksAudioClass = (jclass)(env->CallObjectMethod(cls, findClass, strClassName));
     env->DeleteLocalRef(strClassName);
+    return JavaClass(fireworksAudioClass);
 }
 
 /*
