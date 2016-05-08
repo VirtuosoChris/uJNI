@@ -704,3 +704,14 @@ inline void JavaObject::setField<jdouble>(const char* name, jdouble field)
     jfieldID fieldID = getFieldID(env, javaClass.classInstance, name, compute_signature_string<jdouble>().c_str());
     env->SetDoubleField(obj, fieldID, field);
 }
+
+template<typename... Args>
+JavaObject JavaClass::construct(Args... args)
+{
+    JNIEnv* env = getJNIEnv();
+    std::string ctorSignature = makeSignature<void, Args...>();
+    jmethodID ctorMethod = env->GetMethodID(classInstance, "<init>", ctorSignature.c_str());
+    jobject localRef = env->NewObject(classInstance, ctorMethod, args...);
+    jobject globalRef = env->NewGlobalRef(localRef);
+    return JavaObject(globalRef);
+}

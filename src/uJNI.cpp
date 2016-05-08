@@ -241,15 +241,3 @@ JavaClass JavaClass::superClass()const
 JavaClass::JavaClass(jclass instanceIn) : classInstance(instanceIn)
 {
 }
-
-
-template<typename... Args>
-JavaObject JavaClass::construct(Args... args)
-{
-    JNIEnv* env = getJNIEnv();
-    std::string ctorSignature = makeSignature<void, Args...>();
-    jmethodID ctorMethod = env->GetMethodID(classInstance, "<init>", ctorSignature.c_str());
-    jobject localRef = env->NewObject(classInstance, ctorMethod, args...);
-    jobject globalRef = env->NewGlobalRef(localRef);
-    return JavaObject(env, globalRef);
-}
