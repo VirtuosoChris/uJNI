@@ -176,6 +176,12 @@ JavaObject::~JavaObject()
 }
 
 
+
+JavaObject::JavaObject() : obj(0), javaClass((jclass)0)
+{
+    
+}
+
 JavaObject::JavaObject(jobject objIn)
 :
     obj(getJNIEnv()->NewGlobalRef(objIn))

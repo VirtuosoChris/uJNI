@@ -112,6 +112,7 @@ public:
 
     JavaObject(jobject objIn);
     JavaObject(const JavaObject& objIn);
+    JavaObject();
 
     template<class RETURNTYPE, typename... Args>
     RETURNTYPE call(const std::string& method, Args... args); ///< Call java function named by string "method".  Use <init> for constructor.
@@ -128,7 +129,7 @@ public:
     int monitorEnter()const; ///< enter synchronized block on this object
     int monitorExit()const; ///< exit synchronized block on this object
 
-    JavaObject& operator=(const JavaObject& objIn);
+    JavaObject& operator=(const JavaObject& objIn); ///\todo check reference counting
     bool operator==(const JavaObject& objectIn)const;
     operator bool()const;
 

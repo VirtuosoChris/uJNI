@@ -111,6 +111,13 @@ inline const std::string& compute_signature_string<jobject>()
     return a;
 }
 
+template<>
+inline const std::string& compute_signature_string<jstring>()
+{
+    static const std::string a= "Ljava/lang/String;";
+    return a;
+}
+
 
 template<>
 inline const std::string& compute_signature_string<void>()
