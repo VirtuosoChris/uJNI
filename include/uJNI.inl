@@ -313,7 +313,7 @@ RETURNTYPE JavaObject::call(const std::string& method, Args... args)
 {
     JNIEnv* env = getJNIEnv();
     std::string signature = makeSignature<RETURNTYPE, Args...>();
-    JavaMethodCaller<RETURNTYPE, Args...>::callFunction(env, *this, method, signature, args...);
+    return JavaMethodCaller<RETURNTYPE, Args...>::callFunction(env, *this, method, signature, args...);
 }
 
 template<class RETURNTYPE>
@@ -321,7 +321,7 @@ RETURNTYPE JavaObject::call(const std::string& method)
 {
     JNIEnv* env = getJNIEnv();
     std::string signature = makeSignature<RETURNTYPE, void>();
-    JavaMethodCaller<RETURNTYPE>::callFunction(env, *this, method, signature);
+    return JavaMethodCaller<RETURNTYPE>::callFunction(env, *this, method, signature);
 }
 
 
@@ -330,7 +330,7 @@ RETURNTYPE JavaClass::callStatic(const std::string& method, Args... args)
 {
     JNIEnv* env = getJNIEnv();
     std::string signature = makeSignature<RETURNTYPE, Args...>();
-    JavaStaticMethodCaller<RETURNTYPE, Args...>::callFunction(env, *this, method, signature, args...);
+    return JavaStaticMethodCaller<RETURNTYPE, Args...>::callFunction(env, *this, method, signature, args...);
 }
 
 
@@ -339,9 +339,20 @@ RETURNTYPE JavaClass::callStatic(const std::string& method)
 {
     JNIEnv* env = getJNIEnv();
     std::string signature = makeSignature<RETURNTYPE, void>();
-    JavaStaticMethodCaller<RETURNTYPE>::callFunction(env, *this, method, signature);
+    return JavaStaticMethodCaller<RETURNTYPE>::callFunction(env, *this, method, signature);
 }
 
+
+template<typename... Args>
+class JavaStaticMethodCaller<jstring, Args...>
+{
+public:
+    static jstring callFunction(JNIEnv* env, const JavaClass& javaClass, const std::string& methodStr, const std::string& signature, Args... args)
+    {
+        jmethodID method = getStaticMethodID(env, javaClass.classInstance, methodStr.c_str(), signature.c_str());
+        return (jstring)env->CallStaticObjectMethod(javaClass.classInstance, method, args...);
+    }
+};
 
 template<typename... Args>
 class JavaStaticMethodCaller<jobject, Args...>
