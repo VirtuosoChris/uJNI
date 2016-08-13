@@ -111,6 +111,7 @@ public:
     JavaClass javaClass;
 
     JavaObject(jobject objIn);
+    JavaObject(jobject objIn, const JavaClass& classIn);
     JavaObject(const JavaObject& objIn);
     JavaObject();
 

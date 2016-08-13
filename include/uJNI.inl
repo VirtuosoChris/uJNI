@@ -103,6 +103,13 @@ inline const std::string& compute_signature_string<jdouble>()
     return a;
 }
 
+template<>
+inline const std::string& compute_signature_string<jbyteArray>()
+{
+    static const std::string a= "[B";
+    return a;
+}
+
 
 template<>
 inline const std::string& compute_signature_string<jobject>()
@@ -679,6 +686,22 @@ inline jdouble JavaObject::getField<jdouble>(const char* name)
     JNIEnv* env = getJNIEnv();
     jfieldID fieldID = getFieldID(env, javaClass.classInstance, name, compute_signature_string<jdouble>().c_str());
     return env->GetDoubleField(obj, fieldID);
+}
+
+template <>
+inline jobject JavaObject::getField<jobject>(const char* name)
+{
+    JNIEnv* env = getJNIEnv();
+    jfieldID fieldID = getFieldID(env, javaClass.classInstance, name, compute_signature_string<jobject>().c_str());
+    return env->GetObjectField(obj, fieldID);
+}
+
+template <>
+inline jbyteArray JavaObject::getField<jbyteArray>(const char* name)
+{
+    JNIEnv* env = getJNIEnv();
+    jfieldID fieldID = getFieldID(env, javaClass.classInstance, name, compute_signature_string<jbyteArray>().c_str());
+    return (jbyteArray)env->GetObjectField(obj, fieldID);
 }
 
 

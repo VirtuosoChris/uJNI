@@ -190,6 +190,14 @@ JavaObject::JavaObject(jobject objIn)
 }
 
 
+JavaObject::JavaObject(jobject objIn, const JavaClass& classIn)
+:
+obj(getJNIEnv()->NewGlobalRef(objIn))
+,javaClass(classIn)
+{
+}
+
+
 JavaObject::JavaObject(const JavaObject& objIn)
 :javaClass(objIn.javaClass),
 obj(getJNIEnv()->NewGlobalRef(objIn.obj))
