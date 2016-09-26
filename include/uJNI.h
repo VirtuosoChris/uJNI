@@ -31,8 +31,10 @@
 #include <string>
 #include <functional>
 
+#ifdef USE_NATIVE_WINDOW
 #include <android/native_window_jni.h>
 #include <android_native_app_glue.h>
+#endif
 
 #include "uJNIClasses.h"
 

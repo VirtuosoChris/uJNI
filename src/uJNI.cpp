@@ -45,6 +45,7 @@ void detachCurrentThreadFromJVM()
     jvm()->DetachCurrentThread();
 }
 
+#ifdef USE_NATIVE_WINDOW
 JavaClass loadClass(struct android_app* app, JNIEnv* env, const std::string& classname)
 {
     jobject nativeActivity = app->activity->clazz;
@@ -58,8 +59,9 @@ JavaClass loadClass(struct android_app* app, JNIEnv* env, const std::string& cla
     env->DeleteLocalRef(strClassName);
     return JavaClass(fireworksAudioClass);
 }
+#endif
 
-/*
+#if !defined (USE_NATIVE_WINDOW)
 /// called when the java code calls System.loadLibrary.  Cache the copy of the JVM object ptr.
 jint JNI_OnLoad(JavaVM* pVM, void* reserved)
 {
@@ -71,7 +73,8 @@ jint JNI_OnLoad(JavaVM* pVM, void* reserved)
    }
 
    return JNI_VERSION_1_6;
-}*/
+}
+#endif
 
 
 bool JavaObject::operator==(const JavaObject& objectIn)const
@@ -153,7 +156,8 @@ std::string stringFromJavaString(JNIEnv* env, jstring str)
 
 JavaClass::JavaClass(const std::string& nameIn)
 :
-    classInstance(getJNIEnv()->FindClass(nameIn.c_str()))
+///\todo break the native activity one?  cleanup?
+    classInstance((jclass)getJNIEnv()->NewGlobalRef(getJNIEnv()->FindClass(nameIn.c_str())))
 {
     if(!classInstance)
     {
@@ -166,7 +170,8 @@ JavaClass::JavaClass(const std::string& nameIn)
 
 JavaClass::JavaClass(jobject obj)
 {
-    classInstance = getJNIEnv()->GetObjectClass(obj);
+    ///\todo cleanup,correctness?
+    classInstance = (jclass)getJNIEnv()->NewGlobalRef(getJNIEnv()->GetObjectClass(obj));
 }
 
 
