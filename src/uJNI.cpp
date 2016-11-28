@@ -45,7 +45,7 @@ void detachCurrentThreadFromJVM()
     jvm()->DetachCurrentThread();
 }
 
-#ifdef USE_NATIVE_WINDOW
+#ifdef USE_NATIVE_ACTIVITY
 JavaClass loadClass(struct android_app* app, JNIEnv* env, const std::string& classname)
 {
     jobject nativeActivity = app->activity->clazz;

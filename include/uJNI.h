@@ -31,7 +31,7 @@
 #include <string>
 #include <functional>
 
-#ifdef USE_NATIVE_WINDOW
+#ifdef USE_NATIVE_ACTIVITY
 #include <android/native_window_jni.h>
 #include <android_native_app_glue.h>
 #endif
@@ -102,8 +102,9 @@ public:
     operator bool()const;
 };
 
+#ifdef USE_NATIVE_ACTIVITY
 JavaClass loadClass(struct android_app* app, JNIEnv* env, const std::string& classname);
-
+#endif
 
 class JavaObject
 {
