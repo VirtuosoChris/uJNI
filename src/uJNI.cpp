@@ -20,7 +20,7 @@
 
 //
 //  uJNI.cpp
-//  
+//
 //
 //  Created by Chris Pugh on 6/2/15.
 //
@@ -184,7 +184,7 @@ JavaObject::~JavaObject()
 
 JavaObject::JavaObject() : obj(0), javaClass((jclass)0)
 {
-    
+
 }
 
 JavaObject::JavaObject(jobject objIn)
@@ -216,6 +216,7 @@ JavaObject& JavaObject::operator=(const JavaObject& objIn)
     JNIEnv* env = getJNIEnv();
     env->DeleteGlobalRef(obj);
     obj = env->NewGlobalRef(objIn.obj);
+    return *this;
 }
 
 
@@ -243,13 +244,13 @@ JNIEnv* getJNIEnv(JavaVM* pJavaVM)
 
 int JavaObject::monitorEnter()const
 {
-    getJNIEnv()->MonitorEnter(obj);
+    return getJNIEnv()->MonitorEnter(obj);
 }
 
 
 int JavaObject::monitorExit()const
 {
-    getJNIEnv()->MonitorExit(obj);
+    return getJNIEnv()->MonitorExit(obj);
 }
 
 

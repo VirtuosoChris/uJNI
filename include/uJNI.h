@@ -88,9 +88,11 @@ public:
 
     ////\todo
     template<class RETURNTYPE, typename... Args>
-    constexpr std::string makeSignature()
+    ///constexpr
+    std::string makeSignature()
     {
-        return std::string("(") + compute_signature_string<Args...>() + ')' + compute_signature_string_return<RETURNTYPE>();
+        static std::string rval = std::string("(") + compute_signature_string<Args...>() + ')' + compute_signature_string_return<RETURNTYPE>();
+        return rval;
     }
 
     template <class T>
@@ -142,9 +144,11 @@ public:
     private:
 
     template<class RETURNTYPE, typename... Args>
-    constexpr std::string makeSignature()
+    ///constexpr
+    std::string makeSignature()
     {
-        return std::string("(") +  compute_signature_string<Args...>() + ')' + compute_signature_string_return<RETURNTYPE>();
+        static std::string rval = std::string("(") +  compute_signature_string<Args...>() + ')' + compute_signature_string_return<RETURNTYPE>();
+        return rval;
     }
 
 };
