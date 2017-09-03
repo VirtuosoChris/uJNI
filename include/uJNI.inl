@@ -125,6 +125,13 @@ inline const std::string& compute_signature_string<jstring>()
     return a;
 }
 
+template<>
+inline const std::string& compute_signature_string<jclass>()
+{
+    static const std::string a= "Ljava/lang/Class;";
+    return a;
+}
+
 
 template<>
 inline const std::string& compute_signature_string<void>()
@@ -206,6 +213,17 @@ public:
     {
         jmethodID method = getMethodID(env, object.javaClass.classInstance, methodStr, signature);
         return env->CallObjectMethod(object.obj, method, args...);
+    }
+};
+
+template<typename... Args>
+class JavaMethodCaller<jclass, Args...>
+{
+public:
+    static jclass callFunction(JNIEnv* env, const JavaObject& object, const std::string& methodStr, const std::string& signature, Args... args)
+    {
+        jmethodID method = getMethodID(env, object.javaClass.classInstance, methodStr, signature);
+        return (jclass)env->CallObjectMethod(object.obj, method, args...);
     }
 };
 
